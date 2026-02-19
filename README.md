@@ -1,6 +1,11 @@
-# CrowFX
+<p align="center">
+<img width="718" height="131" alt="header" src="https://github.com/user-attachments/assets/e4fbf6dc-9f26-40bd-9dae-4f3ff64741fc"/>
+</p>
 
+---
 A Unity image effects stack for retro and analog aesthetics. Includes posterization, dithering, RGB bleed, channel jitter, ghosting, edge outlines, palette mapping, and more — all composited through a custom editor with per-section controls.
+
+<img width="1323" height="794" alt="comparison" src="https://github.com/user-attachments/assets/75375a0d-0bea-44e4-9edf-8193545d5f07" />
 
 ---
 
@@ -27,6 +32,7 @@ A Unity image effects stack for retro and analog aesthetics. Includes posterizat
 
 - Unity 2022.3 or later (earlier versions untested)
 - Built-in Render Pipeline
+
 - Camera with `OnRenderImage` support
 
 ---
@@ -51,6 +57,8 @@ Download the `.unitypackage` from the [Releases](https://github.com/Luci0n/CrowF
 
 Add the `CrowImageEffects` component to any camera. All effects are controlled from the custom inspector:
 
+<img width="500" height="833" padding="5px" alt="crowfx-menu" src="https://github.com/user-attachments/assets/37c2cb3d-73c8-4c22-a8e7-58ef6f0c099f" />
+
 - Each section can be **expanded**, **reset**, or **randomized** independently
 - **Star** any section to pin it to the top of the inspector
 - Use the **search bar** to filter settings by name
@@ -58,39 +66,21 @@ Add the `CrowImageEffects` component to any camera. All effects are controlled f
 - Shaders are auto-assigned by name — no manual wiring needed
 
 ---
+## Examples
 
-## Project Structure
+<sub>1. Ghosting + Jitter + Dither</sub>
 
-```
-CrowFX/
-├── CrowImageEffects.cs
-├── .gitignore
-├── Editor/
-│   └── CrowImageEffectsEditor.cs
-├── Font/
-│   └── JetBrainsMonoNL-Thin.ttf
-├── Helpers/
-│   ├── CE_GhostComposite.shader
-│   └── EffectSectionAttribute.cs
-├── Icons/
-└── Stages/
-    ├── CE_ChannelJitter.shader
-    ├── CE_DepthMask.shader
-    ├── CE_Dithering.shader
-    ├── CE_EdgeOutline.shader
-    ├── CE_Ghosting.shader
-    ├── CE_MasterPresent.shader
-    ├── CE_PaletteMapping.shader
-    ├── CE_PosterizeTone.shader
-    ├── CE_Pregrade.shader
-    ├── CE_RGBBleeding.shader
-    ├── CE_SamplingGrid.shader
-    ├── CE_TextureMask.shader
-    └── CE_UnsharpMask.shader
-```
+![recording](https://github.com/user-attachments/assets/604eeb15-4901-4867-8834-d25287cdd2c3)
+
+<sub>2. Posterize + RGB Bleed (Luma) + Unsharp Mask + Virtual Resolution</sub>
+
+![recording2](https://github.com/user-attachments/assets/9504b73c-be0f-4189-9c00-7c710078ede5)
+
+<sub>3. Posterize (Per-Channel) + Edge Outline + Dither (Noise)</sub>
+
+![recording3](https://github.com/user-attachments/assets/597c467b-2dcf-46ab-9e45-bdf9f59ac928)
 
 ---
-
 ## License
 
 MIT
