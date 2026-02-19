@@ -6,6 +6,8 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
 using UnityEngine;
+using UnityEditor.PackageManager;
+using System.IO;
 
 [CustomEditor(typeof(CrowImageEffects))]
 public sealed class CrowImageEffectsEditor : Editor
@@ -51,33 +53,55 @@ public sealed class CrowImageEffectsEditor : Editor
     private const string Pref_Search = "CrowImageEffectsEditor.Search";
     private string _search = "";
 
-    // Icon
-    private Texture2D _diceIcon;
-
-    private Texture2D GetDiceIcon()
+    private static string _rootFromThisScript;
+    private static string RootFromThisScript
     {
-        if (_diceIcon == null)
-            _diceIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Shaders/CrowFX/Icons/dice_icon.png");
-        return _diceIcon;
+        get
+        {
+            if (!string.IsNullOrEmpty(_rootFromThisScript))
+                return _rootFromThisScript;
+
+            var ms = MonoScript.FromScriptableObject(CreateInstance<CrowImageEffectsEditor>());
+            var scriptPath = AssetDatabase.GetAssetPath(ms);
+            DestroyImmediate(ms);
+
+            if (string.IsNullOrEmpty(scriptPath))
+            {
+                _rootFromThisScript = "Assets";
+                return _rootFromThisScript;
+            }
+
+            scriptPath = scriptPath.Replace("\\", "/");
+
+            var editorIndex = scriptPath.LastIndexOf("/Editor/", System.StringComparison.Ordinal);
+            if (editorIndex >= 0)
+            {
+                _rootFromThisScript = scriptPath.Substring(0, editorIndex);
+                return _rootFromThisScript;
+            }
+
+            _rootFromThisScript = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/") ?? "Assets";
+            return _rootFromThisScript;
+        }
     }
+
+    private static T LoadAssetAt<T>(string relativeToRoot) where T : UnityEngine.Object
+    {
+        var path = $"{RootFromThisScript}/{relativeToRoot}".Replace("\\", "/");
+        return AssetDatabase.LoadAssetAtPath<T>(path);
+    }
+
+    private Texture2D _diceIcon;
+    private Texture2D GetDiceIcon()
+        => _diceIcon != null ? _diceIcon : (_diceIcon = LoadAssetAt<Texture2D>("Editor/Icons/dice_icon.png"));
 
     private Texture2D _iconLogo;
-
     private Texture2D GetIconLogo()
-    {
-        if (_iconLogo == null)
-            _iconLogo = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Shaders/CrowFX/Icons/header.png");
-        return _iconLogo;
-    }
-    
-    // Custom Font
+        => _iconLogo != null ? _iconLogo : (_iconLogo = LoadAssetAt<Texture2D>("Editor/Icons/header.png"));
+
     private Font _customFont;
     private Font GetCustomFont()
-    {
-        if (_customFont == null)
-            _customFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/Shaders/CrowFX/Font/JetBrainsMonoNL-Thin.ttf");
-        return _customFont;
-    }
+        => _customFont != null ? _customFont : (_customFont = LoadAssetAt<Font>("Editor/Font/JetBrainsMonoNL-Thin.ttf"));
 
     // Favorites
     private HashSet<string> _favoriteSections = new(StringComparer.Ordinal);

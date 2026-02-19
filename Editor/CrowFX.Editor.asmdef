@@ -1,0 +1,16 @@
+{
+    "name": "CrowFX.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b54575e62fb48114189264585eb29d03"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
