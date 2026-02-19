@@ -44,7 +44,7 @@ A Unity image effects stack for retro and analog aesthetics. Includes posterizat
 In Unity, open `Window > Package Manager`, click `+` → `Add package from git URL`, and enter:
 
 ```
-https://github.com/Luci0n/CrowFX-unity-image-effects.git
+https://github.com/Luci0n/CrowFX-Unity-Image-Effects.git?path=CrowFX
 ```
 
 **Option B — Unity Package**
