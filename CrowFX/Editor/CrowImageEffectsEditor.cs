@@ -57,6 +57,7 @@ namespace CrowFX.EditorTools
         private string _search = "";
 
         private static string _rootFromThisScript;
+
         private static string RootFromThisScript
         {
             get
@@ -64,27 +65,35 @@ namespace CrowFX.EditorTools
                 if (!string.IsNullOrEmpty(_rootFromThisScript))
                     return _rootFromThisScript;
 
-                var ms = MonoScript.FromScriptableObject(CreateInstance<CrowImageEffectsEditor>());
-                var scriptPath = AssetDatabase.GetAssetPath(ms);
-                DestroyImmediate(ms);
-
-                if (string.IsNullOrEmpty(scriptPath))
+                var temp = CreateInstance<CrowImageEffectsEditor>();
+                try
                 {
-                    _rootFromThisScript = "Assets";
+                    var ms = MonoScript.FromScriptableObject(temp);
+                    var scriptPath = AssetDatabase.GetAssetPath(ms);
+
+                    if (string.IsNullOrEmpty(scriptPath))
+                    {
+                        _rootFromThisScript = "Assets";
+                        return _rootFromThisScript;
+                    }
+
+                    scriptPath = scriptPath.Replace("\\", "/");
+
+                    var editorIndex = scriptPath.LastIndexOf("/Editor/", StringComparison.Ordinal);
+                    if (editorIndex >= 0)
+                    {
+                        _rootFromThisScript = scriptPath.Substring(0, editorIndex);
+                        return _rootFromThisScript;
+                    }
+
+                    _rootFromThisScript = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/") ?? "Assets";
                     return _rootFromThisScript;
                 }
-
-                scriptPath = scriptPath.Replace("\\", "/");
-
-                var editorIndex = scriptPath.LastIndexOf("/Editor/", System.StringComparison.Ordinal);
-                if (editorIndex >= 0)
+                finally
                 {
-                    _rootFromThisScript = scriptPath.Substring(0, editorIndex);
-                    return _rootFromThisScript;
+                    if (temp != null)
+                        DestroyImmediate(temp);
                 }
-
-                _rootFromThisScript = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/") ?? "Assets";
-                return _rootFromThisScript;
             }
         }
 
